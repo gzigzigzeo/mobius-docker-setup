@@ -3,7 +3,7 @@ services:
   core:
     build: ./stellar-core
     environment:
-      - DATABASE_URL=dbname=core host=192.168.1.58 user=gzigzigzeo
+      - DATABASE_URL=dbname=core host=docker.for.mac.localhost user=gzigzigzeo
       - NETWORK=pubnet
     ports:
       - "11625:11625"
@@ -14,8 +14,8 @@ services:
     depends_on:
       - "core"
     environment:
-      - STELLAR_CORE_DATABASE_URL=postgres://gzigzigzeo@192.168.1.58/core?sslmode=disable
-      - DATABASE_URL=postgres://gzigzigzeo@192.168.1.58/horizon?sslmode=disable
+      - STELLAR_CORE_DATABASE_URL=postgres://gzigzigzeo@docker.for.mac.localhost/core?sslmode=disable
+      - DATABASE_URL=postgres://gzigzigzeo@docker.for.mac.localhost/horizon?sslmode=disable
       - STELLAR_CORE_URL=http://core:11626
     ports:
       - "8000:8000"
