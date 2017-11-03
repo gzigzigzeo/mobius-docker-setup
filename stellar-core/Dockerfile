@@ -23,13 +23,15 @@ RUN dpkg -i stellar-core.deb
 RUN rm stellar-core.deb
 
 # Root dir
-RUN mkdir -p /opt/stellar/etc
-RUN mkdir -p /opt/stellar/etc/default
-RUN mkdir -p /opt/stellar/history-cache
+RUN mkdir -p /opt/stellar-core/etc
+RUN mkdir -p /opt/stellar-core/etc/default
+
+# Data dir
+RUN mkdir -p /var/stellar-core/history-cache
 
 # Config files
-ADD pubnet /opt/stellar/etc/default/pubnet
-ADD testnet /opt/stellar/etc/default/testnet
+ADD pubnet /opt/stellar-core/etc/default/pubnet
+ADD testnet /opt/stellar-core/etc/default/testnet
 
 # Entrypoint
 ADD start.sh /

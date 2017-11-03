@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 set -e
 
-export STELLAR_HOME="/opt/stellar"
+export STELLAR_HOME="/opt/stellar-core"
 export STELLAR_CONFIG="$STELLAR_HOME/etc/stellar-core.cfg"
 export STELLAR_BIN=/usr/local/bin/stellar-core
 

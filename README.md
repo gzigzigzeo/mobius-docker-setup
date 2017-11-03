@@ -2,14 +2,7 @@
 
 Create database `core` and `horizon`.
 
-# stellar-core
-
-`
-docker build -t mobius/stellar-core stellar-core
-docker run --env DATABASE_URL="dbname=core host=192.168.1.100 user=gzigzigzeo" --rm -it mobius/stellar-core
-`
-
-# stellar-horizon
+`docker-compose up`
 
 # etherum
 

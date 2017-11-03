@@ -8,6 +8,8 @@ services:
     ports:
       - "11625:11625"
       - "11626:11626"
+    volumes:
+      - ./.data:/var/stellar-core
 
   horizon:
     build: ./stellar-horizon
