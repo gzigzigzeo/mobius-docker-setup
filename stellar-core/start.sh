@@ -16,16 +16,16 @@ function main() {
 }
 
 function copy_defaults() {
-  echo "copy_defaults: ok"
   cp $STELLAR_HOME/etc/default/$NETWORK/stellar-core.cfg $STELLAR_CONFIG
+	echo "copy_defaults: ok"
 }
 
 function init() {
   cd $STELLAR_HOME
 
- 	rpl __DATABASE_URL__ "$DATABASE_URL" $STELLAR_CONFIG > /dev/null 2>&1
+ 	rpl __DATABASE_URL__ "$CORE_DATABASE_URL" $STELLAR_CONFIG > /dev/null 2>&1
 
-	if db_empty "$DATABASE_URL"; then
+	if db_empty "$CORE_DATABASE_URL"; then
 		echo "newdb: ok"
 	  $STELLAR_BIN --newdb --conf $STELLAR_CONFIG
 	fi

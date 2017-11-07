@@ -13,7 +13,7 @@ EXPOSE 11626
 
 # Settings
 ENV STELLAR_CORE_VERSION 0.6.3-391-708237b0
-ENV DATABASE_URL "user=gzigzigzeo host=localhost dbname=core"
+ENV CORE_DATABASE_URL "user=gzigzigzeo host=localhost dbname=core"
 ENV NETWORK "testnet"
 ENV STELLAR_DEB_URL "https://s3.amazonaws.com/stellar.org/releases/stellar-core/stellar-core-${STELLAR_CORE_VERSION}_amd64.deb"
 

@@ -11,12 +11,9 @@ services:
 
   horizon:
     build: ./stellar-horizon
+    env_file: ./.env
     depends_on:
       - "core"
-    environment:
-      - STELLAR_CORE_DATABASE_URL=postgres://gzigzigzeo@docker.for.mac.localhost/core?sslmode=disable
-      - DATABASE_URL=postgres://gzigzigzeo@docker.for.mac.localhost/horizon?sslmode=disable
-      - STELLAR_CORE_URL=http://core:11626
     ports:
       - "8000:8000"
 
@@ -33,6 +30,24 @@ services:
       - ./.data/eth/.ethash:/root/.ethash
     entrypoint: geth -${NETWORK}
 
-  bitcoin:
+  btc:
+    env_file: ./.env
+    ports:
+      - "8332:8332"
+      - "8333:8333"
+      - "18332:18332"
+      - "18333:18333"
+    volumes:
+      - "./.data/btc:/home/bitcoin/.bitcoin"
     image: amacneil/bitcoin
     command: bitcoind -testnet
+
+  bifrost:
+    env_file: ./.env
+    build: ./bifrost
+    depends_on:
+      - core
+      - horizon
+      - eth
+      - btc
+    

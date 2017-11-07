@@ -1,7 +1,0 @@
-curl https://glide.sh/get | sh
-cd /go/src/github.com/stellar
-git clone https://github.com/stellar/go.git --branch bifrost
-cd go
-glide --debug install
-cd services/bifrost
-go install

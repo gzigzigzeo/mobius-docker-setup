@@ -12,7 +12,7 @@ EXPOSE 8000
 
 # Settings
 ENV HORIZON_VERSION 0.11.0
-ENV DATABASE_URL "postgres://gzigzigzeo@localhost/horizon"
+ENV HORIZON_DATABASE_URL "postgres://gzigzigzeo@localhost/horizon"
 ENV STELLAR_CORE_DATABASE_URL "postgres://gzigzigzeo@localhost/core"
 ENV STELLAR_CORE_URL="http://localhost:11626"
 ENV STELLAR_TAR_URL "https://github.com/stellar/horizon/releases/download/v${HORIZON_VERSION}/horizon-v${HORIZON_VERSION}-linux-amd64.tar.gz"

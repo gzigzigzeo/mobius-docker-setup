@@ -2,6 +2,7 @@
 set -e
 
 export STELLAR_BIN=/usr/local/bin/horizon
+export DATABASE_URL=$HORIZON_DATABASE_URL
 
 function main() {
 	echo "stellar-horizon"
