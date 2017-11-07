@@ -1,7 +1,7 @@
 version: '3'
 services:
   core:
-    build: ./stellar-core
+    build: ./core
     env_file: ./.env
     ports:
       - "11625:11625"
@@ -10,7 +10,7 @@ services:
       - ./.data/stellar:/var/stellar-core
 
   horizon:
-    build: ./stellar-horizon
+    build: ./horizon
     env_file: ./.env
     depends_on:
       - "core"
