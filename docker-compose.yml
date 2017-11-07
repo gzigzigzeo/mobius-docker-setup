@@ -2,14 +2,12 @@ version: '3'
 services:
   core:
     build: ./stellar-core
-    environment:
-      - DATABASE_URL=dbname=core host=docker.for.mac.localhost user=gzigzigzeo
-      - NETWORK=pubnet
+    env_file: ./.env
     ports:
       - "11625:11625"
       - "11626:11626"
     volumes:
-      - ./.data:/var/stellar-core
+      - ./.data/stellar:/var/stellar-core
 
   horizon:
     build: ./stellar-horizon
@@ -21,3 +19,20 @@ services:
       - STELLAR_CORE_URL=http://core:11626
     ports:
       - "8000:8000"
+
+  eth:
+    image: ethereum/client-go
+    env_file: ./.env
+    ports:
+      - "8545:8545"
+      - "8546:8546"
+      - "30303:30303"
+      - "30303:30303/udp"
+    volumes:
+      - ./.data/eth/.etherum:/root/.etherum
+      - ./.data/eth/.ethash:/root/.ethash
+    entrypoint: geth -${NETWORK}
+
+  bitcoin:
+    image: amacneil/bitcoin
+    command: bitcoind -testnet
