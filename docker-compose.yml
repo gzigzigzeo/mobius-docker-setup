@@ -14,8 +14,6 @@ services:
     env_file: ./.env
     depends_on:
       - "core"
-    ports:
-      - "8000:8000"
 
   eth:
     image: ethereum/client-go
@@ -45,9 +43,10 @@ services:
   bifrost:
     env_file: ./.env
     build: ./bifrost
+    ports:
+      - "8000:8000"
     depends_on:
       - core
       - horizon
       - eth
       - btc
-    
