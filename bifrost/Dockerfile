@@ -9,7 +9,7 @@ ENV PATH "$PATH:/go/bin"
 
 # Dependencies
 RUN apt-get update
-RUN apt-get install -y curl git vim mercurial subversion rpl
+RUN apt-get install -y curl git vim mercurial subversion rpl build-essential
 RUN apt-get clean
 
 # Directories
