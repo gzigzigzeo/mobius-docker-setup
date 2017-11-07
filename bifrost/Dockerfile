@@ -30,7 +30,7 @@ RUN git clone --branch bifrost https://github.com/stellar/go.git /go/src/github.
 
 # Install deps & build
 RUN cd /go/src/github.com/stellar/go && glide install
-#RUN cd /go/src/github.com/stellar/go/services/bifrost && go install
+RUN cd /go/src/github.com/stellar/go/services/bifrost && go install
 
 #ADD start /
 #RUN ["chmod", "+x", "start"]
