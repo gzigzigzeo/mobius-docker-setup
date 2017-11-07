@@ -1,6 +1,8 @@
 # stellar-core-horizon
 
-Create database `core` and `horizon`.
+Create database `core`, `horizon` and `bifrost`.
+
+`cp .env.sample .env`
 
 `docker-compose up`
 
