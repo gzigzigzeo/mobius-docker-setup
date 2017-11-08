@@ -38,6 +38,10 @@ RUN mkdir -p /var/log/stellar-core/pubnet
 ADD pubnet /opt/stellar-core/etc/default/pubnet
 ADD testnet /opt/stellar-core/etc/default/testnet
 
+# Helathcheck
+ADD healthcheck.sh /
+RUN chmod +x healthcheck.sh
+
 # Entrypoint
 ADD start.sh /
 RUN chmod +x start.sh

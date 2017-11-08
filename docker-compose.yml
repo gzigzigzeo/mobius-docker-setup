@@ -6,6 +6,9 @@ services:
     ports:
       - "11625:11625"
       - "11626:11626"
+    healthcheck:
+      test: "CMD /healthcheck.sh"
+    restart: unless-stopped
     volumes:
       - ./.data/stellar-core:/var/stellar-core
       - ./.log/stellar-core:/var/log/stellar-core
