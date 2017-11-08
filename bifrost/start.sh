@@ -2,7 +2,7 @@
 set -e
 
 export BIFROST_HOME="/opt/bifrost"
-export BIFROST_CONFIG="$STELLAR_HOME/etc/bifrost.cfg"
+export BIFROST_CONFIG="$BIFROST_HOME/etc/bifrost.cfg"
 export BIFROST_BIN=bifrost
 
 function main() {
@@ -17,7 +17,7 @@ function main() {
 function init() {
   cd $BIFROST_HOME
 
-	cat $BIFROST_HOME/etc/default/$NETWORK/stellar-core.cfg | envsubst > $BIFROST_CONFIG
+	cat $BIFROST_HOME/etc/default/$NETWORK/bifrost.cfg | envsubst > $BIFROST_CONFIG
 
   echo "init: ok"
 }
