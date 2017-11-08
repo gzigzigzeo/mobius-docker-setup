@@ -38,9 +38,14 @@ services:
       - "30303:30303"
       - "30303:30303/udp"
     volumes:
-      - ./.data/eth/.etherum:/root/.etherum
+      - ./.data/eth/.ethereum:/root/.ethereum
       - ./.data/eth/.ethash:/root/.ethash
-    entrypoint: geth -${NETWORK}
+    healthcheck:
+      test: "CMD geth attach ipc:/root/.ethereum/testnet/geth.ipc --exec \"debug.metrics(true)\" || exit 1"
+    restart: unless-stopped
+    entrypoint: geth --${NETWORK} --rpc --cache 512 --fast --metrics
+    networks:
+      - eth
 
   btc:
     env_file: ./.env
@@ -68,3 +73,4 @@ services:
 networks:
   core:
   horizon:
+  eth:
