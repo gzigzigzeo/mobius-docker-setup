@@ -27,7 +27,12 @@ RUN mkdir -p /opt/stellar-core/etc
 RUN mkdir -p /opt/stellar-core/etc/default
 
 # Data dir
-RUN mkdir -p /var/stellar-core/history-cache
+RUN mkdir -p /var/stellar-core/testnet/history-cache
+RUN mkdir -p /var/stellar-core/pubnet/history-cache
+
+# Logs
+RUN mkdir -p /var/log/stellar-core/testnet
+RUN mkdir -p /var/log/stellar-core/pubnet
 
 # Config files
 ADD pubnet /opt/stellar-core/etc/default/pubnet
