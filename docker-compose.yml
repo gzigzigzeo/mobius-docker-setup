@@ -12,14 +12,22 @@ services:
     volumes:
       - ./.data/stellar-core:/var/stellar-core
       - ./.log/stellar-core:/var/log/stellar-core
+    networks:
+      - core
 
   horizon:
     build: ./horizon
     env_file: ./.env
     depends_on:
       - "core"
+    healthcheck:
+      test: "CMD /healthcheck.sh"
+    restart: unless-stopped
     ports:
       - "8000:8000"
+    networks:
+      - core
+      - horizon
 
   eth:
     image: ethereum/client-go
@@ -56,3 +64,7 @@ services:
       - horizon
       - eth
       - btc
+
+networks:
+  core:
+  horizon:

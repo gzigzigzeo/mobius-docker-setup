@@ -27,6 +27,10 @@ RUN mv /horizon-v${HORIZON_VERSION}-linux-amd64/horizon /usr/local/bin
 RUN chmod +x /usr/local/bin/horizon
 RUN rm -rf horizon.tar.gz /horizon-v${HORIZON_VERSION}-linux-amd64
 
+# Healthcheck
+ADD healthcheck.sh /
+RUN chmod +x healthcheck.sh
+
 # Entrypoint
 ADD start.sh /
 RUN chmod +x start.sh
