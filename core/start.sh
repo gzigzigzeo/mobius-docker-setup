@@ -10,7 +10,6 @@ function main() {
 	echo ""
 	echo "network: $NETWORK"
 
-	copy_defaults
 	init
   start
 }
@@ -23,7 +22,7 @@ function copy_defaults() {
 function init() {
   cd $STELLAR_HOME
 
- 	rpl __DATABASE_URL__ "$CORE_DATABASE_URL" $STELLAR_CONFIG > /dev/null 2>&1
+ 	cat $STELLAR_HOME/etc/default/$NETWORK/stellar-core.cfg | envsubst > $STELLAR_CONFIG
 
 	if db_empty "$CORE_DATABASE_URL"; then
 		echo "newdb: ok"

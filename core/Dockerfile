@@ -4,7 +4,7 @@ MAINTAINER Viktor Sokolov <gzigzigzeo@evilmartians.com>
 
 # Dependencies
 RUN apt-get update
-RUN apt-get install -y curl git libpq-dev libsqlite3-dev libsasl2-dev postgresql-client vim zlib1g-dev rpl
+RUN apt-get install -y curl git libpq-dev libsqlite3-dev libsasl2-dev postgresql-client vim zlib1g-dev gettext
 RUN apt-get clean
 
 # stellar-core ports
