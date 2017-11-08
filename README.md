@@ -15,3 +15,5 @@ Create database `core`, `horizon` and `bifrost`.
 `docker run -d --rm --name bitcoind -v bitcoin-data:/data amacneil/bitcoin bitcoind -testnet`
 
 # bifrost
+
+hm
