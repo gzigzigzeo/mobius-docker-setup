@@ -11,6 +11,7 @@ RUN apt-get clean
 EXPOSE 11625 11626
 
 # Settings
+ENV STELLAR_HOME "/opt/stellar-core"
 ENV STELLAR_CORE_VERSION "0.6.3-391-708237b0"
 ENV CORE_DATABASE_URL "user=gzigzigzeo host=localhost dbname=core"
 ENV NETWORK "testnet"

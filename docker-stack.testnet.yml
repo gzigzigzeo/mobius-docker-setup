@@ -1,0 +1,93 @@
+version: '3.3'
+
+services:
+  stellar:
+    image: stellar/quickstart
+    command: ["--testnet"]
+    networks:
+      - stellar
+    ports:
+      - 8000:8000
+    volumes:
+      - type: volume
+        source: stellar-data
+        target: /opt/stellar:delegated
+    deploy:
+      mode: replicated
+      replicas: 2
+
+  eth:
+    image: ethereum/client-go
+    command: ["--${NETWORK}", "--rpc", "--rpcaddr", "0.0.0.0", "--cache", "512", "--fast", "--metrics"]
+    healthcheck:
+      test: "geth --exec 'net.version' attach http://localhost:8545"
+    networks:
+      - ethereum
+    ports:
+      - 8545:8545
+      - 30303:30303
+    volumes:
+      - type: volume
+        source: ethereum-data
+        target: /root
+    deploy:
+      mode: replicated
+      replicas: 2
+
+  bitcoin:
+    image: nebolsin/bitcoin-rpc
+    env_file: ./.env.beta
+    networks:
+      - bitcoin
+    ports:
+      - 8332:8332
+      - 8333:8333
+    volumes:
+      - type: volume
+        source: bitcoin-data
+        target: /home/bitcoin/.bitcoin
+    deploy:
+      mode: replicated
+      replicas: 2
+
+  bifrost:
+    image: nebolsin/bifrost
+    env_file: ./.env.beta
+    networks:
+      - bitcoin
+      - ethereum
+      - stellar
+    depends_on:
+      - stellar
+      - eth
+      - bitcoin
+    ports:
+      - 9000:9000
+    restart: unless-stopped
+
+
+networks:
+  stellar:
+  ethereum:
+  bitcoin:
+
+volumes:
+  bitcoin-data:
+    driver: "cloudstor:aws"
+    driver_opts:
+      backing: relocatable
+      size: 20
+      ebstype: gp2
+  ethereum-data:
+    driver: "cloudstor:aws"
+    driver_opts:
+      backing: relocatable
+      size: 10
+      ebstype: gp2
+  stellar-data:
+    driver: "cloudstor:aws"
+    driver_opts:
+      backing: relocatable
+      size: 10
+      ebstype: gp2
+
