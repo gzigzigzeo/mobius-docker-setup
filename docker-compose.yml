@@ -1,76 +1,81 @@
 version: '3'
+
 services:
   core:
     build: ./core
     env_file: ./.env
+    networks:
+      - stellar
     ports:
-      - "11625:11625"
-      - "11626:11626"
+      - 11625:11625
+      - 11626:11626
+    volumes:
+      - stellar-data:/var/stellar-core
     healthcheck:
       test: "CMD /healthcheck.sh"
     restart: unless-stopped
-    volumes:
-      - ./.data/stellar-core:/var/stellar-core
-      - ./.log/stellar-core:/var/log/stellar-core
-    networks:
-      - core
 
   horizon:
+    depends_on:
+      - core
     build: ./horizon
     env_file: ./.env
-    depends_on:
-      - "core"
+    networks:
+      - stellar
+    ports:
+      - 8000:8000
     healthcheck:
       test: "CMD /healthcheck.sh"
     restart: unless-stopped
-    ports:
-      - "8000:8000"
-    networks:
-      - core
-      - horizon
 
   eth:
     image: ethereum/client-go
     env_file: ./.env
+    networks:
+      - ethereum
     ports:
-      - "8545:8545"
-      - "8546:8546"
-      - "30303:30303"
-      - "30303:30303/udp"
+      - 8545:8545
+      - 8546:8546
+      - 30303:30303
+      - 30303:30303/udp
     volumes:
-      - ./.data/eth/.ethereum:/root/.ethereum
-      - ./.data/eth/.ethash:/root/.ethash
+      - ethereum-data:/root
+    entrypoint: geth --${NETWORK} --rpc --cache 512 --fast --metrics
     healthcheck:
       test: "CMD geth attach ipc:/root/.ethereum/testnet/geth.ipc --exec \"debug.metrics(true)\" || exit 1"
     restart: unless-stopped
-    entrypoint: geth --${NETWORK} --rpc --cache 512 --fast --metrics
-    networks:
-      - eth
 
-  btc:
+  bitcoin:
+    image: nebolsin/bitcoin-rpc
     env_file: ./.env
+    networks:
+      - bitcoin
     ports:
-      - "8332:8332"
-      - "8333:8333"
-      - "18332:18332"
-      - "18333:18333"
+      - 8332:8332
+      - 8333:8333
     volumes:
-      - "./.data/btc:/home/bitcoin/.bitcoin"
-    image: amacneil/bitcoin
-    command: bitcoind -testnet
+      - bitcoin-data:/home/bitcoin/.bitcoin
+    restart: unless-stopped
 
   bifrost:
-    env_file: ./.env
     build: ./bifrost
-    ports:
-      - "9000:9000"
     depends_on:
       - core
       - horizon
       - eth
-      - btc
+      - bitcoin
+    env_file: ./.env
+    ports:
+      - 9000:9000
+    restart: unless-stopped
+
 
 networks:
-  core:
-  horizon:
-  eth:
+  stellar:
+  ethereum:
+  bitcoin:
+
+volumes:
+  bitcoin-data:
+  ethereum-data:
+  stellar-data:

@@ -7,7 +7,7 @@ RUN apt-get update
 RUN apt-get install -y curl git libpq-dev libsqlite3-dev libsasl2-dev postgresql-client vim zlib1g-dev rpl
 RUN apt-get clean
 
-# stellar-core ports
+# Horizon port
 EXPOSE 8000
 
 # Settings
@@ -21,18 +21,13 @@ ENV INGEST="true"
 ENV PER_HOUR_RATE_LIMIT="72000"
 
 # Installation
-RUN wget -O horizon.tar.gz $STELLAR_TAR_URL
-RUN tar -zxvf horizon.tar.gz
-RUN mv /horizon-v${HORIZON_VERSION}-linux-amd64/horizon /usr/local/bin
-RUN chmod +x /usr/local/bin/horizon
-RUN rm -rf horizon.tar.gz /horizon-v${HORIZON_VERSION}-linux-amd64
+RUN wget -O horizon.tar.gz $STELLAR_TAR_URL \
+ && tar -zxvf horizon.tar.gz \
+ && mv /horizon-v${HORIZON_VERSION}-linux-amd64/horizon /usr/local/bin \
+ && chmod +x /usr/local/bin/horizon \
+ && rm -rf horizon.tar.gz /horizon-v${HORIZON_VERSION}-linux-amd64
 
-# Healthcheck
-ADD healthcheck.sh /
-RUN chmod +x healthcheck.sh
+# Healthcheck & Entrypoint
+COPY start.sh healthcheck.sh /
 
-# Entrypoint
-ADD start.sh /
-RUN chmod +x start.sh
-
-ENTRYPOINT /start.sh
+ENTRYPOINT ["/start.sh"]
