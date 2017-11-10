@@ -18,7 +18,7 @@
     {
       "name": "bitcoin",
       "image": "nebolsin/bitcoin-rpc",
-      "memory": 1024,
+      "memory": 512,
       "essential": true,
       "mountPoints": [
         {
