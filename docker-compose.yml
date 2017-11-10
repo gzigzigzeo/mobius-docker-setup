@@ -1,49 +1,42 @@
 version: '3'
 
 services:
-  core:
-    build: ./core
-    env_file: ./.env
-    networks:
-      - stellar
-    ports:
-      - 11625:11625
-      - 11626:11626
-    volumes:
-      - stellar-data:/var/stellar-core
-    healthcheck:
-      test: "CMD /healthcheck.sh"
-    restart: unless-stopped
+#  core:
+#    build: ./core
+#    env_file: ./.env
+#    networks:
+#      - stellar
+#    ports:
+#      - 11625:11625
+#      - 11626:11626
+#    volumes:
+#      - stellar-data:/var/stellar-core
+#    healthcheck:
+#      test: "CMD /healthcheck.sh"
+#    restart: unless-stopped
 
-  horizon:
-    depends_on:
-      - core
-    build: ./horizon
-    env_file: ./.env
+  stellar:
+    image: stellar/quickstart
+    command: ["--testnet"]
     networks:
       - stellar
     ports:
       - 8000:8000
-    healthcheck:
-      test: "CMD /healthcheck.sh"
-    restart: unless-stopped
+    volumes:
+      - stellar-data:/opt/stellar:delegated
 
   eth:
     image: ethereum/client-go
-    env_file: ./.env
     networks:
       - ethereum
     ports:
       - 8545:8545
-      - 8546:8546
       - 30303:30303
-      - 30303:30303/udp
     volumes:
       - ethereum-data:/root
-    entrypoint: geth --${NETWORK} --rpc --cache 512 --fast --metrics
+    command: ["--${NETWORK}", "--rpc", "--rpcaddr", "0.0.0.0", "--cache", "512", "--fast", "--metrics"]
     healthcheck:
-      test: "CMD geth attach ipc:/root/.ethereum/testnet/geth.ipc --exec \"debug.metrics(true)\" || exit 1"
-    restart: unless-stopped
+      test: "geth --exec 'net.version' attach http://localhost:8545"
 
   bitcoin:
     image: nebolsin/bitcoin-rpc
@@ -55,16 +48,18 @@ services:
       - 8333:8333
     volumes:
       - bitcoin-data:/home/bitcoin/.bitcoin
-    restart: unless-stopped
 
   bifrost:
     build: ./bifrost
-    depends_on:
-      - core
-      - horizon
+    env_file: ./.env
+    networks:
+      - bitcoin
+      - ethereum
+      - stellar
+    links:
+      - stellar
       - eth
       - bitcoin
-    env_file: ./.env
     ports:
       - 9000:9000
     restart: unless-stopped

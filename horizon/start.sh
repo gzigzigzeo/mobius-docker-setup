@@ -1,32 +1,24 @@
-#! /usr/bin/env bash
-set -e
+#!/usr/bin/env bash
 
-export STELLAR_BIN=/usr/local/bin/horizon
-export DATABASE_URL=$HORIZON_DATABASE_URL
+set -o errexit
+set -o pipefail
 
-function main() {
-	echo "stellar-horizon"
-
-	init
-  start
-}
-
-function init() {
-	if db_empty "$DATABASE_URL"; then
-    echo "db init: ok"
-	  $STELLAR_BIN db init
-	fi
-
-  echo "init: ok"
-}
-
-function start() {
-  echo "starting..."
-  exec $STELLAR_BIN
-}
+set -o allexport
+: ${DATABASE_URL:="postgres://$HORIZON_DATABASE"}
+: ${STELLAR_CORE_DATABASE_URL:="postgres://$STELLAR_CORE_DATABASE"}
+: ${STELLAR_CORE_URL:="http://core:11626"}
+set +o allexport
 
 function db_empty() {
-	psql "$1" -c "\dt" | grep "No relations" > /dev/null
+  psql "$1" -c "\dt" | grep "No relations" > /dev/null
 }
 
-main $@
+echo "stellar-horizon"
+
+if db_empty "$HORIZON_DATABASE"; then
+  echo "db init: ok"
+  horizon db init
+fi
+
+echo "starting..."
+exec horizon
