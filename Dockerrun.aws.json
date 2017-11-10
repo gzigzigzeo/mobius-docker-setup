@@ -36,6 +36,33 @@
           "hostPort": 8333
         }
       ]
-    }
+    },
+
+    {
+      "name": "core",
+      "image": "670461063650.dkr.ecr.us-west-1.amazonaws.com/mobius/core:lastest",
+      "memory": 512,
+      "essential": true,
+      "mountPoints": [
+        {
+          "containerPath": "/var/stellar-core",
+          "sourceVolume": "stellar-core-data"
+        },
+        {
+          "containerPath": "/var/log/stellar-core",
+          "sourceVolume": "stellar-core-log"
+        }
+      ],
+      "portMappings": [
+        {
+          "containerPort": 11625,
+          "hostPort": 11625
+        },
+        {
+          "containerPort": 11626,
+          "hostPort": 11626
+        }
+      ]
+    }    
   ]
 }
