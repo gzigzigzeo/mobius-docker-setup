@@ -8,42 +8,26 @@ RUN apt-get install -y curl git libpq-dev libsqlite3-dev libsasl2-dev postgresql
 RUN apt-get clean
 
 # stellar-core ports
-EXPOSE 11625
-EXPOSE 11626
+EXPOSE 11625 11626
 
 # Settings
-ENV STELLAR_CORE_VERSION 0.6.3-391-708237b0
+ENV STELLAR_CORE_VERSION "0.6.3-391-708237b0"
 ENV CORE_DATABASE_URL "user=gzigzigzeo host=localhost dbname=core"
 ENV NETWORK "testnet"
 ENV STELLAR_DEB_URL "https://s3.amazonaws.com/stellar.org/releases/stellar-core/stellar-core-${STELLAR_CORE_VERSION}_amd64.deb"
 
 # Installation
-RUN wget -O stellar-core.deb $STELLAR_DEB_URL
-RUN dpkg -i stellar-core.deb
-RUN rm stellar-core.deb
-
-# Root dir
-RUN mkdir -p /opt/stellar-core/etc
-RUN mkdir -p /opt/stellar-core/etc/default
-
-# Data dir
-RUN mkdir -p /var/stellar-core/testnet/history-cache
-RUN mkdir -p /var/stellar-core/pubnet/history-cache
-
-# Logs
-RUN mkdir -p /var/log/stellar-core/testnet
-RUN mkdir -p /var/log/stellar-core/pubnet
+RUN wget -O stellar-core.deb $STELLAR_DEB_URL \
+ && dpkg -i stellar-core.deb \
+ && rm stellar-core.deb \
+ && mkdir -p /opt/stellar-core/etc/default \
+ && mkdir -p /var/stellar-core/${NETWORK}/history-cache
 
 # Config files
-ADD pubnet /opt/stellar-core/etc/default/pubnet
-ADD testnet /opt/stellar-core/etc/default/testnet
+COPY pubnet /opt/stellar-core/etc/default/pubnet
+COPY testnet /opt/stellar-core/etc/default/testnet
 
-# Helathcheck
-ADD healthcheck.sh /
-RUN chmod +x healthcheck.sh
+# Helathcheck & Entrypoint
+COPY start.sh healthcheck.sh /
 
-# Entrypoint
-ADD start.sh /
-RUN chmod +x start.sh
-
-ENTRYPOINT /start.sh
+ENTRYPOINT ["/start.sh"]
