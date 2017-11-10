@@ -2,38 +2,38 @@
   "AWSEBDockerrunVersion": 2,
   "volumes": [
     {
-      "host": { "sourcePath": "./.data/stellar-core" },
+      "host": { "sourcePath": "/var/app/current/bitcoin" },
+      "name": "bitcoin-data"
+    },
+    {
+      "host": { "sourcePath": "/var/app/current/stellar-core" },
       "name": "stellar-core-data"
     },
     {
-      "host": { "sourcePath": "./.log/stellar-core" },
+      "host": { "sourcePath": "/var/app/current/log/stellar-core" },
       "name": "stellar-core-log"
     }
   ],
   "containerDefinitions": [
     {
-      "name": "core",
-      "image": "670461063650.dkr.ecr.us-west-1.amazonaws.com/mobius/core:lastest",
-      "memory": 512,
+      "name": "bitcoin",
+      "image": "nebolsin/bitcoin-rpc",
+      "memory": 1024,
       "essential": true,
       "mountPoints": [
         {
-          "containerPath": "/var/stellar-core",
-          "sourceVolume": "stellar-core-data"
-        },
-        {
-          "containerPath": "/var/log/stellar-core",
-          "sourceVolume": "stellar-core-log"
+          "containerPath": "/home/bitcoin/.bitcoin",
+          "sourceVolume": "bitcoin-data"
         }
       ],
       "portMappings": [
         {
-          "containerPort": 11625,
-          "hostPort": 11625
+          "containerPort": 8332,
+          "hostPort": 8332
         },
         {
-          "containerPort": 11626,
-          "hostPort": 11626
+          "containerPort": 8333,
+          "hostPort": 8333
         }
       ]
     }
