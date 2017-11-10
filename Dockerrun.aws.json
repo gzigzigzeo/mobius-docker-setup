@@ -2,15 +2,15 @@
   "AWSEBDockerrunVersion": 2,
   "volumes": [
     {
-      "host": { "sourcePath": "/var/app/current/bitcoin" },
+      "host": { "sourcePath": "/var/app/current/.data/bitcoin" },
       "name": "bitcoin-data"
     },
     {
-      "host": { "sourcePath": "/var/app/current/stellar-core" },
+      "host": { "sourcePath": "/var/app/current/.data/stellar-core" },
       "name": "stellar-core-data"
     },
     {
-      "host": { "sourcePath": "/var/app/current/log/stellar-core" },
+      "host": { "sourcePath": "/var/app/current/.log/stellar-core" },
       "name": "stellar-core-log"
     }
   ],
@@ -63,6 +63,6 @@
           "hostPort": 11626
         }
       ]
-    }    
+    }
   ]
 }
