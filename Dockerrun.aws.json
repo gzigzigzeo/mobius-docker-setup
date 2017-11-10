@@ -13,7 +13,7 @@
   "containerDefinitions": [
     {
       "name": "core",
-      "image": "670461063650.dkr.ecr.us-west-1.amazonaws.com/mobius/core",
+      "image": "670461063650.dkr.ecr.us-west-1.amazonaws.com/mobius/core:lastest",
       "memory": 512,
       "essential": true,
       "mountPoints": [
