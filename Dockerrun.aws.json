@@ -1,5 +1,15 @@
 {
   "AWSEBDockerrunVersion": 2,
+  "volumes": [
+    {
+      "host": { "sourcePath": "./.data/stellar-core" },
+      "name": "stellar-core-data"
+    },
+    {
+      "host": { "sourcePath": "./.log/stellar-core" },
+      "name": "stellar-core-log"
+    }
+  ],
   "containerDefinitions": [
     {
       "name": "core",
@@ -8,38 +18,24 @@
       "essential": true,
       "mountPoints": [
         {
-            "containerPath": "/var/stellar-core",
-            "sourceVolume": "stellar-core-data"
+          "containerPath": "/var/stellar-core",
+          "sourceVolume": "stellar-core-data"
         },
         {
-            "containerPath": "/var/log/stellar-core",
-            "sourceVolume": "stellar-core-log"
+          "containerPath": "/var/log/stellar-core",
+          "sourceVolume": "stellar-core-log"
         }
       ],
       "portMappings": [
-          {
-              "containerPort": 11625,
-              "hostPort": 11625
-          },
-          {
-              "containerPort": 11626,
-              "hostPort": 11626
-          }
+        {
+          "containerPort": 11625,
+          "hostPort": 11625
+        },
+        {
+          "containerPort": 11626,
+          "hostPort": 11626
+        }
       ]
     }
-  ],
-    "volumes": [
-        {
-            "host": {
-                "sourcePath": "./.data/stellar-core"
-            },
-            "name": "stellar-core-data"
-        },
-        {
-            "host": {
-                "sourcePath": "./.log/stellar-core"
-            },
-            "name": "stellar-core-log"
-        },
-    ]
+  ]
 }
